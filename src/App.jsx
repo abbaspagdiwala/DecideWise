@@ -1,20 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
-import Career from "./pages/Career";
-import Finance from "./pages/Finance";
-import Startup from "./pages/Startup";
+import DecisionPage from "./pages/DecisionPage";
 import Report from "./pages/Report";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/career" element={<Career />} />
-        <Route path="/finance" element={<Finance />} />
-        <Route path="/startup" element={<Startup />} />
+        <Route path="/decision/:type" element={<DecisionPage />} />
         <Route path="/report" element={<Report />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

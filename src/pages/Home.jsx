@@ -1,29 +1,28 @@
-import { Briefcase, IndianRupee, Rocket } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Briefcase,
+  IndianRupee,
+  Rocket,
+  GraduationCap,
+  Heart,
+  HeartPulse,
+  Plane,
+} from "lucide-react";
+
+import decisionFlows from "../data/decisionFlows";
 
 function Home() {
   const navigate = useNavigate();
 
-  const cards = [
-    {
-      title: "Career",
-      desc: "Choose your next career move confidently.",
-      icon: <Briefcase size={34} />,
-      path: "/career",
-    },
-    {
-      title: "Finance",
-      desc: "Make smarter money decisions.",
-      icon: <IndianRupee size={34} />,
-      path: "/finance",
-    },
-    {
-      title: "Startup",
-      desc: "Validate and improve your startup idea.",
-      icon: <Rocket size={34} />,
-      path: "/startup",
-    },
-  ];
+  const icons = {
+    Briefcase: Briefcase,
+    IndianRupee: IndianRupee,
+    Rocket: Rocket,
+    GraduationCap: GraduationCap,
+    Heart: Heart,
+    HeartPulse: HeartPulse,
+    Plane: Plane,
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -38,27 +37,38 @@ function Home() {
         </p>
 
         <div className="grid md:grid-cols-3 gap-8 mt-16">
+          {Object.entries(decisionFlows).map(([key, flow]) => {
 
-          {cards.map((card) => (
-            <div
-              key={card.title}
-              onClick={() => navigate(card.path)}
-              className="cursor-pointer rounded-2xl border border-slate-700 p-8 hover:border-indigo-400 transition"
-            >
-              <div className="mb-5 text-indigo-400">
-                {card.icon}
+            const Icon = icons[flow.icon];
+
+            return (
+              <div
+                key={key}
+                onClick={() => navigate(`/decision/${key}`)}
+                className="cursor-pointer rounded-2xl border border-slate-700 p-8 hover:border-indigo-400 transition duration-300"
+              >
+                <div className="mb-5 text-indigo-400">
+                  <Icon size={34} />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-semibold">
+                    {flow.title}
+                  </h2>
+
+                  {flow.status === "coming-soon" && (
+                    <span className="text-xs bg-slate-800 px-2 py-1 rounded-full text-gray-300">
+                      Soon
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-gray-400 mt-3">
+                  {flow.description}
+                </p>
               </div>
-
-              <h2 className="text-2xl font-semibold">
-                {card.title}
-              </h2>
-
-              <p className="text-gray-400 mt-3">
-                {card.desc}
-              </p>
-            </div>
-          ))}
-
+            );
+          })}
         </div>
 
       </div>
