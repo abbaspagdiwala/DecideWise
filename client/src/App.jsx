@@ -5,6 +5,8 @@ import DecisionPage from "./pages/DecisionPage";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import Analysis from "./pages/Analysis";
+import About from "./pages/About";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/report" element={<Report />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/analysis" element={<Analysis />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/error" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
