@@ -2,8 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import decisionFlows from "../data/decisionFlows";
 import { buildPrompt } from "../utils/promptBuilder";
-import { analyzeDecision } from "../services/mesh";
-
+import { analyzeDecision } from "../services/api";
 function DecisionPage() {
   const { type } = useParams();
   const navigate = useNavigate();
@@ -19,25 +18,19 @@ function DecisionPage() {
     }));
   };
 
-  const handleAnalysis = async () => {
-    try {
-      const prompt = buildPrompt(flow, answers);
+const handleAnalysis = async () => {
+  try {
+    const prompt = buildPrompt(flow, answers);
 
-      console.log("Prompt:");
-      console.log(prompt);
+    const result = await analyzeDecision(prompt);
 
-      const result = await analyzeDecision(prompt);
+    console.log(result);
 
-      console.log("AI Response:");
-      console.log(result);
-
-      // We'll replace this later with navigation to Report page
-      alert("AI analysis completed! Check the console.");
-    } catch (error) {
-      console.error(error);
-      alert("AI analysis failed.");
-    }
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong.");
+  }
+};
 
   if (!flow) {
     return (
