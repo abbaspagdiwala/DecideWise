@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import decisionFlows from "../data/decisionFlows";
-
+import { buildPrompt } from "../utils/promptBuilder";
 function DecisionPage() {
   const { type } = useParams();
   const navigate = useNavigate();
@@ -69,9 +69,7 @@ function DecisionPage() {
                 <input
                   type="text"
                   value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
+                  onChange={(e) => handleChange(question.id, e.target.value)}
                   className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
                 />
               )}
@@ -80,9 +78,7 @@ function DecisionPage() {
                 <input
                   type="number"
                   value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
+                  onChange={(e) => handleChange(question.id, e.target.value)}
                   className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
                 />
               )}
@@ -91,9 +87,7 @@ function DecisionPage() {
                 <textarea
                   rows="4"
                   value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
+                  onChange={(e) => handleChange(question.id, e.target.value)}
                   className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
                 />
               )}
@@ -101,9 +95,7 @@ function DecisionPage() {
               {question.type === "select" && (
                 <select
                   value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
+                  onChange={(e) => handleChange(question.id, e.target.value)}
                   className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
                 >
                   <option value="">Select an option</option>
@@ -119,7 +111,10 @@ function DecisionPage() {
           ))}
 
           <button
-            onClick={() => console.log(answers)}
+            onClick={() => {
+              const prompt = buildPrompt(flow, answers);
+              console.log(prompt);
+            }}
             className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-semibold transition"
           >
             Continue Analysis
