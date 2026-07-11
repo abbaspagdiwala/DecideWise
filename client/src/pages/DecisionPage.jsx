@@ -143,6 +143,7 @@ const handleAnalysis = async () => {
       </div>
     </div>
   );
+  console.log(result.result);
 }
 
 export default DecisionPage;
