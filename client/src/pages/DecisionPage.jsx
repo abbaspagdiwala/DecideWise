@@ -3,34 +3,12 @@ import { useState } from "react";
 import decisionFlows from "../data/decisionFlows";
 import { buildPrompt } from "../utils/promptBuilder";
 import { analyzeDecision } from "../services/api";
+
 function DecisionPage() {
   const { type } = useParams();
   const navigate = useNavigate();
 
   const flow = decisionFlows[type];
-
-  const [answers, setAnswers] = useState({});
-
-  const handleChange = (id, value) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
-
-const handleAnalysis = async () => {
-  try {
-    const prompt = buildPrompt(flow, answers);
-
-    const result = await analyzeDecision(prompt);
-
-    console.log(result);
-
-  } catch (error) {
-    console.error(error);
-    alert("Something went wrong.");
-  }
-};
 
   if (!flow) {
     return (
@@ -42,109 +20,163 @@ const handleAnalysis = async () => {
 
   if (flow.status === "coming-soon") {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center px-6">
-        <h1 className="text-5xl font-bold mb-4">{flow.title}</h1>
+      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center">
+        <h1 className="text-5xl font-bold">{flow.title}</h1>
 
-        <p className="text-gray-400 mb-8 text-center max-w-md">
-          This decision assistant is currently under development.
+        <p className="text-slate-400 mt-4">
+          This decision assistant is under development.
         </p>
 
         <button
           onClick={() => navigate("/")}
-          className="bg-indigo-600 px-6 py-3 rounded-xl hover:bg-indigo-500 transition"
+          className="mt-8 rounded-xl bg-indigo-600 px-6 py-3 hover:bg-indigo-500"
         >
-          Back to Home
+          Back Home
         </button>
       </div>
     );
   }
 
+  const [answers, setAnswers] = useState({});
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  const totalQuestions = flow.questions.length;
+  const question = flow.questions[currentQuestion];
+
+  const handleChange = (id, value) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleAnalysis = async () => {
+    try {
+      const prompt = buildPrompt(flow, answers);
+
+      navigate("/analysis", {
+        state: {
+          prompt,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Analysis failed.");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[450px] w-[450px] rounded-full bg-indigo-600/15 blur-[120px]" />
-      <div className="max-w-3xl mx-auto py-16 px-6">
+    <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
+      <div className="absolute left-1/2 top-0 h-[450px] w-[450px] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-[150px]" />
+
+      <div className="relative max-w-2xl mx-auto px-6 py-20">
         <button
           onClick={() => navigate("/")}
-          className="text-indigo-400 hover:text-indigo-300 mb-6"
+          className="text-indigo-400 hover:text-indigo-300"
         >
           ← Back
         </button>
 
-        <h1 className="text-5xl font-bold">{flow.title}</h1>
+        <h1 className="text-5xl font-bold mt-8">{flow.title}</h1>
 
-        <p className="text-gray-400 mt-3">{flow.description}</p>
+        <p className="text-slate-400 mt-3">{flow.description}</p>
 
-        <div className="mt-10 space-y-6">
-          {flow.questions.map((question) => (
-            <div key={question.id}>
-              <label className="block mb-2 text-lg font-medium">
-                {question.label}
-              </label>
+        <div className="mt-12">
+          <div className="flex justify-between text-sm text-slate-400 mb-2">
+            <span>
+              Question {currentQuestion + 1} of {totalQuestions}
+            </span>
 
-              {question.type === "text" && (
-                <input
-                  type="text"
-                  value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
-                  className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
-                />
-              )}
+            <span>
+              {Math.round(((currentQuestion + 1) / totalQuestions) * 100)}%
+            </span>
+          </div>
 
-              {question.type === "number" && (
-                <input
-                  type="number"
-                  value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
-                  className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
-                />
-              )}
+          <div className="h-2 rounded-full bg-slate-800 overflow-hidden mb-10">
+            <div
+              className="h-full bg-indigo-500 transition-all duration-300"
+              style={{
+                width: `${((currentQuestion + 1) / totalQuestions) * 100}%`,
+              }}
+            />
+          </div>
 
-              {question.type === "textarea" && (
-                <textarea
-                  rows="4"
-                  value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
-                  className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
-                />
-              )}
+          <label className="block text-2xl font-semibold mb-6">
+            {question.label}
+          </label>
 
-              {question.type === "select" && (
-                <select
-                  value={answers[question.id] || ""}
-                  onChange={(e) =>
-                    handleChange(question.id, e.target.value)
-                  }
-                  className="w-full rounded-lg bg-slate-800 p-3 outline-none border border-slate-700 focus:border-indigo-500"
-                >
-                  <option value="">Select an option</option>
+          {question.type === "text" && (
+            <input
+              type="text"
+              value={answers[question.id] || ""}
+              onChange={(e) => handleChange(question.id, e.target.value)}
+              className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-4 outline-none focus:border-indigo-500"
+            />
+          )}
 
-                  {question.options.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-          ))}
+          {question.type === "number" && (
+            <input
+              type="number"
+              value={answers[question.id] || ""}
+              onChange={(e) => handleChange(question.id, e.target.value)}
+              className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-4 outline-none focus:border-indigo-500"
+            />
+          )}
 
-          <button
-            onClick={handleAnalysis}
-            className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-semibold transition"
-          >
-            Continue Analysis
-          </button>
+          {question.type === "textarea" && (
+            <textarea
+              rows="5"
+              value={answers[question.id] || ""}
+              onChange={(e) => handleChange(question.id, e.target.value)}
+              className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-4 outline-none focus:border-indigo-500"
+            />
+          )}
+
+          {question.type === "select" && (
+            <select
+              value={answers[question.id] || ""}
+              onChange={(e) => handleChange(question.id, e.target.value)}
+              className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-4 outline-none focus:border-indigo-500"
+            >
+              <option value="">Select an option</option>
+
+              {question.options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          )}
+
+          <div className="flex justify-between mt-12">
+            <button
+              disabled={currentQuestion === 0}
+              onClick={() => setCurrentQuestion((prev) => prev - 1)}
+              className="rounded-xl border border-slate-700 px-6 py-3 disabled:opacity-40"
+            >
+              Previous
+            </button>
+
+            {currentQuestion === totalQuestions - 1 ? (
+              <button
+                onClick={handleAnalysis}
+                className="rounded-xl bg-indigo-600 px-8 py-3 hover:bg-indigo-500"
+              >
+                Analyze Decision
+              </button>
+            ) : (
+              <button
+                onClick={() => setCurrentQuestion((prev) => prev + 1)}
+                className="rounded-xl bg-indigo-600 px-8 py-3 hover:bg-indigo-500"
+              >
+                Next
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
-  console.log(result.result);
 }
 
 export default DecisionPage;
