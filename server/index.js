@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import analyzeRouter from "./routes/analyze.js";
 
 dotenv.config();
+console.log(process.env.MESH_API_KEY);
 
 const app = express();
 

@@ -61,6 +61,7 @@ const handleAnalysis = async () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[450px] w-[450px] rounded-full bg-indigo-600/15 blur-[120px]" />
       <div className="max-w-3xl mx-auto py-16 px-6">
         <button
           onClick={() => navigate("/")}

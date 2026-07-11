@@ -1,20 +1,35 @@
 import express from "express";
+import OpenAI from "openai";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const router = express.Router();
+
+const client = new OpenAI({
+  apiKey: process.env.MESH_API_KEY,
+  baseURL: "https://api.meshapi.ai/v1",
+});
 
 router.post("/", async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    console.log("========== PROMPT ==========");
-    console.log(prompt);
-    console.log("============================");
+    const response = await client.chat.completions.create({
+      model: "openai/gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
 
     res.json({
       success: true,
-      message: "Backend is working!",
-      promptReceived: prompt,
+      result: response.choices[0].message.content,
     });
+
   } catch (error) {
     console.error(error);
 
