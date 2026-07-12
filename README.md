@@ -136,7 +136,7 @@ This keeps your API key private and allows the backend to securely communicate w
 
 # Screenshots
 
-![alt text](<screenshots/Screenshot 2026-07-11 192139.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192214.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192244.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192420.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192448.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192458.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192516.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192659.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192722.png>) ![alt text](<screenshots/Screenshot 2026-07-11 201939.png>) ![alt text](<screenshots/Screenshot 2026-07-11 202008.png>)
+![alt text](<screenshots/Screenshot 2026-07-11 192139.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192214.png>) ![alt text](<screenshots/Screenshot 2026-07-11 192244.png>) ![alt text](<screenshots/Screenshot 2026-07-12 182516.png>) ![alt text](<screenshots/Screenshot 2026-07-12 182553.png>) ![alt text](<screenshots/Screenshot 2026-07-12 182606.png>) ![alt text](<screenshots/Screenshot 2026-07-12 182655.png>) ![alt text](<screenshots/Screenshot 2026-07-12 182712.png>) ![alt text](<screenshots/Screenshot 2026-07-12 182808.png>) ![alt text](<screenshots/Screenshot 2026-07-11 201939.png>) ![alt text](<screenshots/Screenshot 2026-07-11 202008.png>)
 
 ---
 
